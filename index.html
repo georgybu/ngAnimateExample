@@ -8,13 +8,16 @@
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/Faker/build/build/faker.min.js"></script>
     <script src="app.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="bower_components/normalize.css/normalize.css"/>
+    <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
-    <div class="app-container">
-        <div class="animation-list-container"
-             data-ng-controller="appCtrl as vm">
+<div class="app-container">
+
+    <div>
+        <h3>Simple list</h3>
+        <div class="animation-list-container"  data-ng-controller="dataController as vm" data-dr-resize-event>
             <ul>
                 <li data-ng-repeat="item in vm.items track by $index" class="animation-list-item">
                     <span class="title">{{item.title}}</span>
@@ -22,11 +25,13 @@
                 </li>
             </ul>
         </div>
+    </div>
 
-        <div class="animation-list-container"
-             data-ng-controller="appCtrl as vm">
+    <div>
+        <h3>Animation with CSS3 transition</h3>
+        <div class="animation-list-container" data-ng-controller="animateCtrl as vm" data-dr-resize-event>
             <ul>
-                <li data-ng-repeat="line in vm.lines" class="animation-list-line">
+                <li data-ng-repeat="line in vm.lines" class="animation-list-line animation1">
                     <ul>
                         <li data-ng-repeat="item in line track by $index" class="animation-list-item">
                             <span class="title">{{item.title}}</span>
@@ -35,7 +40,6 @@
                     </ul>
                 </li>
             </ul>
-
             <div class="animation-list-buttons">
                 <button class="prev" data-ng-click="vm.prev()">&lt;&lt;</button>
                 <button class="next" data-ng-click="vm.next()">&gt;&gt;</button>
@@ -43,5 +47,63 @@
         </div>
     </div>
 
+    <div>
+        <h3>Animation with $animateCss</h3>
+        <div class="animation-list-container"
+             data-ng-controller="dataController as vm" style="overflow: hidden;" data-dr-resize-event>
+            <div data-dr-animation-list="vm.items"></div>
+        </div>
+    </div>
+
+</div>
+
+<div class="app-container two">
+    <div>
+        <h3>Animation with CSS3 transition</h3>
+        <div class="animation-list-container" data-ng-controller="animateCtrl as vm" data-dr-resize-event>
+            <ul>
+                <li data-ng-repeat="line in vm.lines" class="animation-list-line animation1">
+                    <ul>
+                        <li data-ng-repeat="item in line track by $index" class="animation-list-item">
+                            <span class="title">{{item.title}}</span>
+                            <span class="value">{{item.value}}</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="animation-list-buttons">
+                <button class="prev" data-ng-click="vm.prev()">&lt;&lt;</button>
+                <button class="next" data-ng-click="vm.next()">&gt;&gt;</button>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h3>Animation with $animateCss</h3>
+        <div class="animation-list-container"
+             data-ng-controller="dataController as vm" style="overflow: hidden;" data-dr-resize-event>
+            <div data-dr-animation-list="vm.items"></div>
+        </div>
+    </div>
+</div>
+
+<script type="text/ng-template" id="animation-list.html">
+    <div>
+        <ul class="animation-list-wrapper">
+            <li data-ng-repeat="line in lines" class="animation-list-line">
+                <ul>
+                    <li data-ng-repeat="item in line track by $index" class="animation-list-item">
+                        <span class="title">{{item.title}}</span>
+                        <span class="value">{{item.value}}</span>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <div class="animation-list-buttons">
+            <button class="prev" data-ng-click="prev()" data-ng-disabled="isRunning">&lt;&lt;</button>
+            <button class="next" data-ng-click="next()" data-ng-disabled="isRunning">&gt;&gt;</button>
+        </div>
+    </div>
+</script>
 </body>
 </html>
