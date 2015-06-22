@@ -11,6 +11,11 @@ SSH >>  git clone git@gitserver:georgy/nganimationexample.git
 HTTP >> git clone http://gitserver/georgy/nganimationexample.git
 ```
 
+Install bower components:
+```
+bower install
+```
+
 Run http server
 ```
 $ hs
