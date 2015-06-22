@@ -105,7 +105,6 @@ function animateCtrl($scope, dataProvider) {
 
   (function (instance, scope) {
     scope.$on('element::resize', function (event, data) {
-      console.log(event, data);
       if (data) {
         colItemsCount = Math.floor(data.width / itemSize.width) || 0;
         rowItemsCount = Math.floor(data.height / itemSize.height) || 0;
@@ -132,14 +131,6 @@ function drAnimationList($animateCss) {
 
       var colItemsCount, rowItemsCount, lastIndex = 0;
       var animation = { easing: 'ease-out', duration: 0.5 };
-
-      console.log(
-        '$scope.$id', scope.$id, '; ',
-        'itemSize', JSON.stringify(itemSize), '; ',
-        'containerSize', JSON.stringify(containerSize),
-        'colItemsCount', JSON.stringify(colItemsCount), '; ',
-        'rowItemsCount', JSON.stringify(rowItemsCount), '; '
-      );
 
       scope.isRunning = false;
 
