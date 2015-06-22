@@ -109,6 +109,7 @@ function animateCtrl($scope, dataProvider) {
       if (data) {
         colItemsCount = Math.floor(data.width / itemSize.width) || 0;
         rowItemsCount = Math.floor(data.height / itemSize.height) || 0;
+        instance.lines = [];
         for (var i = 0; i < rowItemsCount; i++) {
           instance.lines.push(getRow(instance.items));
         }
@@ -188,6 +189,7 @@ function drAnimationList($animateCss) {
           if (data) {
             colItemsCount = Math.floor(data.width / itemSize.width) || 0;
             rowItemsCount = Math.floor(data.height / itemSize.height) || 0;
+            instance.lines = [];
             for (var i = 0; i < rowItemsCount; i++) {
               instance.lines.push(getRow(instance.items));
             }
