@@ -7,3 +7,5 @@ $ cd nganimationexample
 $ bower install
 $ hs
 ```
+
+Demo [here](https://georgybu.github.io/IID_Generator)
