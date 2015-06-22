@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ng animate test</title>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/Faker/build/build/faker.min.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="animation-list-container"
+             data-ng-controller="appCtrl as vm">
+            <ul>
+                <li data-ng-repeat="item in vm.items track by $index" class="animation-list-item">
+                    <span class="title">{{item.title}}</span>
+                    <span class="value">{{item.value}}</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="animation-list-container"
+             data-ng-controller="appCtrl as vm">
+            <ul>
+                <li data-ng-repeat="line in vm.lines" class="animation-list-line">
+                    <ul>
+                        <li data-ng-repeat="item in line track by $index" class="animation-list-item">
+                            <span class="title">{{item.title}}</span>
+                            <span class="value">{{item.value}}</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="animation-list-buttons">
+                <button class="prev" data-ng-click="vm.prev()">&lt;&lt;</button>
+                <button class="next" data-ng-click="vm.next()">&gt;&gt;</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

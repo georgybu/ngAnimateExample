@@ -1,0 +1,21 @@
+{
+  "name": "nganimate2",
+  "version": "0.0.0",
+  "authors": [
+    "Georgy Bunin <georgy@fmr.co.il>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-animate": "~1.4.1",
+    "angular": "~1.4.1",
+    "Faker": "~2.1.5",
+    "jquery": "~2.1.4"
+  }
+}

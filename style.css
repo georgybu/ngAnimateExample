@@ -1,0 +1,102 @@
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+.app-container {
+    width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.animation-list-container {
+    width: 400px;
+    height: 500px;
+    border: 1px solid lightgray;
+    display: inline-block;
+    overflow: auto;
+    background-color: rgba(245, 245, 245, 0.1);
+    position: relative;
+}
+
+.animation-list-item {
+    width: 150px;
+    height: 70px;
+    margin: 3px;
+    border: 1px solid gray;
+    text-align: center;
+    display: inline-block;
+    vertical-align: top;
+    list-style: none;
+}
+
+.animation-list-item .title {
+    width: 100%;
+    display: block;
+    background-color: whitesmoke;
+    height: 50%;
+    font-weight: bold;
+}
+
+.animation-list-item .value {
+    display: block;
+    background-color: aliceblue;
+    height: 50%;
+}
+
+.animation-list-buttons {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 18px;
+    z-index: 1;
+}
+
+.animation-list-buttons button {
+    background: none;
+    border: 1px solid lightgray;
+    border-radius: 3px;
+    display: block;
+    position: absolute;
+    width: 35px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.animation-list-buttons button.prev {
+    left: 0;
+}
+
+.animation-list-buttons button.next {
+    right: 0;
+}
+
+/*
+ 78px - this is
+        70px        - animation-list-item height
+      +  1px * 2    - animation-list-item border
+      +  3px * 2    - animation-list-item margin
+*/
+
+.animation-list-line {
+    height: 78px;
+    overflow: hidden;
+}
+
+.animation-list-line.ng-enter {
+    transition: 0.5s linear all;
+    height: 0;
+}
+
+.animation-list-line.ng-enter.ng-enter-active {
+    height: 78px;
+}
+
+.animation-list-line.ng-leave {
+    transition: 0.5s linear all;
+    height: 78px;
+}
+
+.animation-list-line.ng-leave.ng-leave-active {
+    height: 0;
+}
