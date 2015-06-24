@@ -106,8 +106,10 @@ h2 {
     overflow: hidden;
 }
 
+.animation1 {
+    transition: all 0.5s linear;
+}
 .animation1.ng-enter {
-    transition: 0.5s linear all;
     height: 0;
 }
 
@@ -116,7 +118,6 @@ h2 {
 }
 
 .animation1.ng-leave {
-    transition: 0.5s linear all;
     height: 78px;
 }
 
