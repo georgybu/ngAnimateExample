@@ -8,4 +8,4 @@ $ bower install
 $ hs
 ```
 
-Demo [here](https://georgybu.github.io/IID_Generator)
+Demo [here](https://georgybu.github.io/ngAnimateExample/)
