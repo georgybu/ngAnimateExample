@@ -32,7 +32,7 @@
         <div class="animation-list-container" data-ng-controller="animateCtrl as vm" data-dr-resize-event>
             <ul>
                 <li data-ng-repeat="line in vm.lines" class="animation-list-line animation1"
-                    dr-css-transition-callback>
+                    dr-css-transition-callback="vm.transitionCallback">
                     <ul>
                         <li data-ng-repeat="item in line track by $index" class="animation-list-item">
                             <span class="title">{{item.title}}</span>
@@ -63,7 +63,8 @@
         <h3>Animation with CSS3 transition</h3>
         <div class="animation-list-container" data-ng-controller="animateCtrl as vm" data-dr-resize-event>
             <ul>
-                <li data-ng-repeat="line in vm.lines" class="animation-list-line animation1">
+                <li data-ng-repeat="line in vm.lines" class="animation-list-line animation1"
+                    dr-css-transition-callback="vm.transitionCallback">
                     <ul>
                         <li data-ng-repeat="item in line track by $index" class="animation-list-item">
                             <span class="title">{{item.title}}</span>

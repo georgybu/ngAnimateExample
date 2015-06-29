@@ -115,11 +115,19 @@ function animateCtrl($scope, dataProvider) {
       }
     });
   }(this, $scope));
+
+  var transitionState = null;
+  this.transitionCallback = function (transition) {
+    if (transitionState != transition.state) {
+      transitionState = transition.state;
+      var isRun = transitionState === "start";
+      console.log($scope.$id, +new Date(), 'Animation with transition', isRun);
+    }
+  }
 }
 
 function drAnimationList($animateCss) {
   return {
-    replace: true,
     scope: {items: '=drAnimationList'},
     templateUrl: 'animation-list.html',
     link: function (scope, element) {
@@ -133,6 +141,10 @@ function drAnimationList($animateCss) {
       var animation = { easing: 'ease-out', duration: 0.5 };
 
       scope.isRunning = false;
+
+      function logState() {
+        console.log(scope.$id, +new Date(), 'Animation with $animateCss', scope.isRunning);
+      }
 
       function getRow(itemList) {
         var row = [];
@@ -150,6 +162,7 @@ function drAnimationList($animateCss) {
       scope.prev = function () {
         if (!scope.isRunning) {
           scope.isRunning = true;
+          logState();
           scope.listElemnent.get(0).style.top = animationTop;
           scope.lines.unshift(getRow(this.items));
           animation.from = {top: animationTop};
@@ -157,6 +170,7 @@ function drAnimationList($animateCss) {
           $animateCss(scope.listElemnent, animation).start().then(function () {
             scope.lines.pop();
             scope.isRunning = false;
+            logState();
           });
         }
       };
@@ -164,6 +178,7 @@ function drAnimationList($animateCss) {
       scope.next = function () {
         if (!scope.isRunning) {
           scope.isRunning = true;
+          logState();
           scope.lines.push(getRow(this.items));
           animation.from = {top: '0px'};
           animation.to = {top: animationTop};
@@ -171,6 +186,7 @@ function drAnimationList($animateCss) {
             scope.listElemnent.get(0).style.top = '0px';
             scope.lines.shift();
             scope.isRunning = false;
+            logState();
           });
         }
       };
@@ -208,36 +224,37 @@ function sampleController($q) {
   };
 }
 
-function drIntervalController($scope) {
-  // isPause
-  // startActionCall
-  // finishActionCall
-  // interval = promise + timeout
-
-  console.log('start');
-  $scope.action().then(function() {
-    console.log('end');
-  });
-
+function drIntervalController($scope, $timeout) {
+  function loop() {
+    $scope.action().then(function() {
+      $timeout(function() { loop() }, 1500);
+    });
+    loop();
+  }
 }
 
 function drInterval() {
   return {
-    scope: {
-      action: '&drInterval'
-    },
+    scope: { action: '&drInterval' },
     controller: drIntervalController
   }
 }
 
 
-function drCssTransitionCallback($transition) {
+function drCssTransitionCallback() {
   return {
+    scope: { action: '&drCssTransitionCallback' },
     link: function link(scope, element, attrs) {
-      console.log(element, 'animation start');
-
-      $(element).one('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function() {
-        console.log(element, 'animation end');
+      var eventList = [
+        'transitionend',
+        'webkitTransitionEnd',
+        'oTransitionEnd',
+        'otransitionend'
+      ].join(' ');
+      var callback = scope.action();
+      callback({ state: 'start' });
+      $(element).one(eventList, function() {
+        callback({ state: 'finish' });
       });
     }
   }
@@ -245,10 +262,7 @@ function drCssTransitionCallback($transition) {
 
 angular.element(document).ready(function () {
   var appName = 'ngApp';
-  angular.module(appName, [
-    'ngAnimate',
-    'ui.bootstrap.transition'
-  ])
+  angular.module(appName, [ 'ngAnimate' ])
     .controller('dataController', dataController)
     .controller('animateCtrl', animateCtrl)
     .controller('sampleController', sampleController)
@@ -259,87 +273,3 @@ angular.element(document).ready(function () {
     .factory('dataProvider', dataProvider);
   angular.bootstrap(document, [appName]);
 });
-
-// ----------------------------------------------------------------------------
-// this is copy from angular-bootstrap
-
-/**
- * $transition service provides a consistent interface to trigger CSS 3 transitions and to be informed when they complete.
- * @param  {DOMElement} element  The DOMElement that will be animated.
- * @param  {string|object|function} trigger  The thing that will cause the transition to start:
- *   - As a string, it represents the css class to be added to the element.
- *   - As an object, it represents a hash of style attributes to be applied to the element.
- *   - As a function, it represents a function to be called that will cause the transition to occur.
- * @return {Promise}  A promise that is resolved when the transition finishes.
- */
-angular.module('ui.bootstrap.transition', []).factory('$transition', ['$q', '$timeout', '$rootScope', function($q, $timeout, $rootScope) {
-
-  var $transition = function(element, trigger, options) {
-    options = options || {};
-    var deferred = $q.defer();
-    var endEventName = $transition[options.animation ? 'animationEndEventName' : 'transitionEndEventName'];
-
-    var transitionEndHandler = function(event) {
-      $rootScope.$apply(function() {
-        element.unbind(endEventName, transitionEndHandler);
-        deferred.resolve(element);
-      });
-    };
-
-    if (endEventName) {
-      element.bind(endEventName, transitionEndHandler);
-    }
-
-    // Wrap in a timeout to allow the browser time to update the DOM before the transition is to occur
-    $timeout(function() {
-      if ( angular.isString(trigger) ) {
-        element.addClass(trigger);
-      } else if ( angular.isFunction(trigger) ) {
-        trigger(element);
-      } else if ( angular.isObject(trigger) ) {
-        element.css(trigger);
-      }
-      //If browser does not support transitions, instantly resolve
-      if ( !endEventName ) {
-        deferred.resolve(element);
-      }
-    });
-
-    // Add our custom cancel function to the promise that is returned
-    // We can call this if we are about to run a new transition, which we know will prevent this transition from ending,
-    // i.e. it will therefore never raise a transitionEnd event for that transition
-    deferred.promise.cancel = function() {
-      if ( endEventName ) {
-        element.unbind(endEventName, transitionEndHandler);
-      }
-      deferred.reject('Transition cancelled');
-    };
-
-    return deferred.promise;
-  };
-
-  // Work out the name of the transitionEnd event
-  var transElement = document.createElement('trans');
-  var transitionEndEventNames = {
-    'WebkitTransition': 'webkitTransitionEnd',
-    'MozTransition': 'transitionend',
-    'OTransition': 'oTransitionEnd',
-    'transition': 'transitionend'
-  };
-  var animationEndEventNames = {
-    'WebkitTransition': 'webkitAnimationEnd',
-    'MozTransition': 'animationend',
-    'OTransition': 'oAnimationEnd',
-    'transition': 'animationend'
-  };
-  function findEndEventName(endEventNames) {
-    for (var name in endEventNames){
-      if (transElement.style[name] !== undefined) {
-        return endEventNames[name];
-      }
-    }
-  }
-  $transition.transitionEndEventName = findEndEventName(transitionEndEventNames);
-  $transition.animationEndEventName = findEndEventName(animationEndEventNames);
-  return $transition;
-}]);
